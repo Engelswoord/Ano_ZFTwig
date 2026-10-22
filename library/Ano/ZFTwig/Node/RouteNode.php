@@ -25,9 +25,9 @@ use Twig\Node\Node;
  */
 class Ano_ZFTwig_Node_RouteNode extends Node
 {
-    public function __construct(Node $route, AbstractExpression $attributes = null, $lineno, $tag = null)
+    public function __construct(Node $route, ?AbstractExpression $attributes, $lineno)
     {
-        parent::__construct(array('route' => $route, 'route_attributes' => $attributes), array(), $lineno, $tag);
+        parent::__construct(array('route' => $route, 'route_attributes' => $attributes), array(), $lineno);
     }
 
     /**

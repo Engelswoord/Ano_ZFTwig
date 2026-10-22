@@ -31,11 +31,14 @@ class Ano_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
      */
     public function preDispatch()
     {
-        $controller = $this->getActionController();
-        $request    = $this->getRequest();
-        $action     = $request->getActionName();
+        $controller  = $this->getActionController();
+        $request     = $this->getRequest();
+        $action      = $request->getActionName();
         $rendererName = $this->getRendererSwitcher($action);
-        $this->view->setTemplateEngine($rendererName);
+
+        if (is_object($this->view) && method_exists($this->view, 'setTemplateEngine')) {
+            $this->view->setTemplateEngine($rendererName);
+        }
     }
 
     /**
@@ -47,21 +50,38 @@ class Ano_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
         $controller = $this->getActionController();
         $dispatcher = $this->getFrontController()->getDispatcher();
         $action     = (string) $dispatcher->formatActionName($action);
-        $rc = new ReflectionMethod($controller, $action);
-        $renderer = $this->parseDocComment($rc->getDocComment(), 'render', 'php');
-        return $renderer;
+
+        if (!is_object($controller) || !method_exists($controller, $action)) {
+            return 'php';
+        }
+
+        try {
+            $method = new ReflectionMethod($controller, $action);
+            $docComment = $method->getDocComment();
+        } catch (ReflectionException $e) {
+            return 'php';
+        }
+
+        return $this->parseDocComment($docComment, 'render', 'php');
     }
 
     /**
      * Parse PHPDoc to find a special tag and associated value
-     * @param string $string String to parse
+     * @param string|false $string String to parse
      * @param string $tag Tag to search
      * @param string $default Default value if no tag found
      */
     public function parseDocComment($string, $tag, $default = '')
     {
-        $matches = array();
-        preg_match("/".$tag.":?\s+(.*)(\\r\\n|\\r|\\n)/U", $string, $matches);
-        return (isset($matches[1])) ? trim($matches[1]) : $default;
+        if (!is_string($string) || $string === '') {
+            return $default;
+        }
+
+        $pattern = '/@' . preg_quote((string) $tag, '/') . '(?::)?\s+([^\r\n]+)/';
+        if (preg_match($pattern, $string, $matches) !== 1) {
+            return $default;
+        }
+
+        return trim(preg_replace('/\s*\*\/\s*$/', '', $matches[1]));
     }
 }

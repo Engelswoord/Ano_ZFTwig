@@ -27,9 +27,9 @@ class Ano_ZFTwig_Node_MetaNode extends Node
 {
     protected $contentKey;
 
-    public function __construct(Twig_Node_Expression $options, $lineno, $tag = null)
+    public function __construct(AbstractExpression $options, $lineno)
     {
-        parent::__construct(array('options' => $options), array(), $lineno, $tag);
+        parent::__construct(array('options' => $options), array(), $lineno);
     }
 
     /**
@@ -39,12 +39,12 @@ class Ano_ZFTwig_Node_MetaNode extends Node
      */
     public function compile(Compiler $compiler)
     {
-        $options = $this->getNode('options');
-        $mode = $options->hasNode('mode') ? $options->getNode('mode')->getAttribute('value') : 'append';
-        $name = $options->hasNode('name') ? $options->getNode('name') : false;
-        $httpEquiv = $options->hasNode('http-equiv') ? $options->getNode('http-equiv') : false;
-        $content = $options->hasNode('content') ? $options->getNode('content') : '';
-        $offset = $options->hasNode('offset') ? $options->getNode('offset') : false;
+        $options = Ano_ZFTwig_Node_Options::fromNode($this->getNode('options'));
+        $mode = isset($options['mode']) ? $options['mode']->getAttribute('value') : 'append';
+        $name = isset($options['name']) ? $options['name'] : false;
+        $httpEquiv = isset($options['http-equiv']) ? $options['http-equiv'] : false;
+        $content = isset($options['content']) ? $options['content'] : '';
+        $offset = isset($options['offset']) ? $options['offset'] : false;
 
         $compiler
             ->addDebugInfo($this)
@@ -81,10 +81,16 @@ class Ano_ZFTwig_Node_MetaNode extends Node
                 ->raw(', ');
         }
 
-        $compiler
-            ->subcompile($key)
-            ->raw(', ')
-            ->subcompile($content)
-            ->raw(");\n");
+        if (null === $key) {
+            throw new LogicException('A meta tag requires either a name or an http-equiv option.');
+        }
+
+        $compiler->subcompile($key)->raw(', ');
+        if ($content instanceof Node) {
+            $compiler->subcompile($content);
+        } else {
+            $compiler->string($content);
+        }
+        $compiler->raw(");\n");
     }
 }

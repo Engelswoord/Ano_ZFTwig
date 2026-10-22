@@ -26,10 +26,10 @@ class Ano_ZFTwig_Node_HolderNode extends Node
 {
     protected $placeholder;
 
-    public function __construct($placeholder, $attributes, $lineno, $tag = null)
+    public function __construct($placeholder, $attributes, $lineno)
     {
         $this->placeholder = $placeholder;
-        parent::__construct(array(), array('holder_attributes' => $attributes), $lineno, $tag);
+        parent::__construct(array(), array('holder_attributes' => $attributes), $lineno);
     }
 
     /**

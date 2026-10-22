@@ -27,10 +27,10 @@ class Ano_ZFTwig_Node_HelperNode extends Node
 {
     protected $helper;
 
-    public function __construct($helper, AbstractExpression $attributes = null, $lineno, $tag = null)
+    public function __construct($helper, ?AbstractExpression $attributes, $lineno)
     {
         $this->helper = $helper;
-        parent::__construct(array(), array('helper_attributes' => $attributes), array(), $lineno, $tag);
+        parent::__construct(array(), array('helper_attributes' => $attributes), $lineno);
     }
 
     /**

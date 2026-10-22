@@ -27,9 +27,9 @@ class Ano_ZFTwig_Node_HeadTitleNode extends Node
 {
     protected $contentKey;
 
-    public function __construct(AbstractExpression $expr, $lineno, $tag = null)
+    public function __construct(AbstractExpression $expr, $lineno)
     {
-        parent::__construct(array('expr' => $expr), array(), $lineno, $tag);
+        parent::__construct(array('expr' => $expr), array(), $lineno);
     }
 
     /**

@@ -28,7 +28,7 @@ class Ano_ZFTwig_TokenParser_HelperTokenParser extends AbstractTokenParser
      * Parses a token and returns a node.
      *
      * @param  Token $token A Token instance
-     * @return Twig_NodeInterface A Twig_NodeInterface instance
+     * @return \Twig\Node\Node
      */
     public function parse(Token $token)
     {
@@ -46,14 +46,14 @@ class Ano_ZFTwig_TokenParser_HelperTokenParser extends AbstractTokenParser
 
         $stream->expect(Token::BLOCK_END_TYPE);
 
-        return new Ano_ZFTwig_Node_HelperNode($helper, $attributes, $lineno, $this->getTag());
+        return new Ano_ZFTwig_Node_HelperNode($helper, $attributes, $lineno);
     }
 
 
     /**
      * Gets the tag name associated with this token parser.
      *
-     * @param string The tag name
+     * @param string $tagName The tag name
      */
     public function getTag()
     {

@@ -1,5 +1,6 @@
 <?php
 use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 /**
  * This file is part of the Ano_ZFTwig package
@@ -108,6 +109,11 @@ class Ano_ZFTwig_View_Engine_TwigEngine extends Ano_View_Engine_Abstract
     {
         return $this->environment;
     }
+    
+    public function getView()
+    {
+        return $this->view;
+    }
 
     /**
      * Renders the template
@@ -117,12 +123,28 @@ class Ano_ZFTwig_View_Engine_TwigEngine extends Ano_View_Engine_Abstract
      */
     public function render($template, $vars = null)
     {
+        // if ($vars) {
+            // print '<pre>';
+            // var_dump(debug_backtrace(2, 50));
+            // exit();
+            // var_dump($vars);exit();
+            // var_dump($key);
+            
+            // $vars = get_object_vars($vars['_templateEngines']['twig']);
+            // var_dump($vars['view']['_data']);exit();
+        // }
+        
         $path = dirname($template);
         $templateFile = basename($template);
 
-        $this->getEnvironment()->getLoader()->addPath($path);
-        $template = $this->getEnvironment()->loadTemplate($templateFile);
-        $template->display($vars);
+        $loader = $this->getEnvironment()->getLoader();
+        if (!$loader instanceof FilesystemLoader) {
+            throw new LogicException('Twig engine requires a filesystem loader.');
+        }
+
+        $loader->addPath($path);
+        $template = $this->getEnvironment()->load($templateFile);
+        $template->display($vars['_data'] ?? []);
     }
 
     /**
@@ -162,4 +184,3 @@ class Ano_ZFTwig_View_Engine_TwigEngine extends Ano_View_Engine_Abstract
         return $viewDirs;
     }
 }
-

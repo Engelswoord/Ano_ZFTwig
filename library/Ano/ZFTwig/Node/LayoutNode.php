@@ -26,10 +26,10 @@ class Ano_ZFTwig_Node_LayoutNode extends Node
 {
     protected $contentKey;
 
-    public function __construct($contentKey, $lineno, $tag = null)
+    public function __construct($contentKey, $lineno)
     {
         $this->contentKey = $contentKey;
-        parent::__construct(array(), array(), $lineno, $tag);
+        parent::__construct(array(), array(), $lineno);
     }
 
     /**

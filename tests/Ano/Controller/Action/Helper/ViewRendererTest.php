@@ -35,6 +35,8 @@ require_once 'Ano/View/Engine/PhpEngine.php';
 
 require_once dirname(__FILE__) . '/../../_files/modules/foo/controllers/IndexController.php';
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test class for Zend_Controller_Action_Helper_ViewRenderer.
  *
@@ -43,11 +45,8 @@ require_once dirname(__FILE__) . '/../../_files/modules/foo/controllers/IndexCon
  * @subpackage UnitTests
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @group      Zend_Controller
- * @group      Zend_Controller_Action
- * @group      Zend_Controller_Action_Helper
  */
-class Ano_Controller_Action_Helper_ViewRendererTest extends PHPUnit_Framework_TestCase
+class Ano_Controller_Action_Helper_ViewRendererTest extends TestCase
 {
     /**
      * Base path to controllers, views
@@ -80,24 +79,12 @@ class Ano_Controller_Action_Helper_ViewRendererTest extends PHPUnit_Framework_Te
     public $response;
 
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite("Zend_Controller_Action_Helper_ViewRendererTest");
-        $result = PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      *
      * @access protected
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->basePath = realpath(dirname(__FILE__) . str_repeat(DIRECTORY_SEPARATOR . '..', 2));
         $this->request  = new Zend_Controller_Request_Http();
@@ -118,7 +105,7 @@ class Ano_Controller_Action_Helper_ViewRendererTest extends PHPUnit_Framework_Te
      *
      * @access protected
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Zend_Controller_Action_HelperBroker::resetHelpers();
     }
@@ -170,5 +157,16 @@ class Ano_Controller_Action_Helper_ViewRendererTest extends PHPUnit_Framework_Te
 
         $this->helper->preDispatch();
         $this->assertSame($engine, $this->helper->view->getTemplateEngine());
+    }
+
+    public function testParseDocCommentReturnsDefaultWhenCommentIsUnavailable()
+    {
+        $this->assertSame('php', $this->helper->parseDocComment(false, 'render', 'php'));
+        $this->assertSame('php', $this->helper->parseDocComment('', 'render', 'php'));
+    }
+
+    public function testParseDocCommentReturnsRendererAnnotation()
+    {
+        $this->assertSame('twig', $this->helper->parseDocComment('/** @render: twig */', 'render', 'php'));
     }
 }

@@ -25,9 +25,9 @@ use Twig\Node\Node;
 class Ano_ZFTwig_Node_TransNode extends Node
 {
 
-    public function __construct(Node $body, $lineno, $tag = null)
+    public function __construct(Node $body, $lineno)
     {
-        parent::__construct(array('body' => $body), array(), $lineno, $tag);
+        parent::__construct(array('body' => $body), array(), $lineno);
     }
 
     /**

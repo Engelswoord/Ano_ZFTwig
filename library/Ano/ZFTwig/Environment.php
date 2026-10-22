@@ -40,7 +40,7 @@ class Ano_ZFTwig_Environment extends Environment
      *
      * @see Twig\Environment::__construct()
      */
-    public function __construct(Zend_View_Interface $view, LoaderInterface $loader = null, $options = array(), Lexer $lexer = null, Parser $parser = null, Compiler $compiler = null)
+    public function __construct(Zend_View_Interface $view, ?LoaderInterface $loader = null, $options = array(), ?Lexer $lexer = null, ?Parser $parser = null, ?Compiler $compiler = null)
     {
         $this->setView($view);
         parent::__construct($loader, $options, $lexer, $parser, $compiler);

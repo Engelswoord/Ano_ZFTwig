@@ -25,7 +25,7 @@ interface Ano_View_Engine_Interface
      * @param string $template the file script to render
      * @param array  $vars     array of vars to assign to the template
      */
-    //public function render($template, $vars);
+    public function render($template, $vars);
 
     /**
      * Sets the view suffix for the engine

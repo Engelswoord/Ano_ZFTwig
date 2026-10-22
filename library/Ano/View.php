@@ -173,6 +173,22 @@ class Ano_View extends Zend_View_Abstract
     public function _run()
     {
         $filename = func_get_arg(0);
+        
+        // print '<pre>';
+        // $ctx = get_object_vars($this);
+        // foreach($ctx as $key => $val) {
+        //     var_dump($key);
+        //     print '<hr>';
+        //     var_dump($val);
+        //     if ($key == '_data') {
+        //         print '!!';
+        //         $out = $val;
+        //         var_dump($val);
+        //     }
+        // }
+        // var_dump($out);
+        // exit();
+        
         $this->getTemplateEngine()->render($filename, get_object_vars($this));
     }
 }

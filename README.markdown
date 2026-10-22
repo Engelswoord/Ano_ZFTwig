@@ -36,6 +36,11 @@ Installation
     autoloaderNamespaces[] = "Ano_"
     pluginPaths.Ano_Application_Resource = APPLICATION_PATH "/../library/Ano/Application/Resource"
 	
+Requirements
+============
+
+* PHP 8.4
+* Twig 3
 
 
 Configuration

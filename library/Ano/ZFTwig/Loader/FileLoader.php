@@ -31,7 +31,7 @@ class Ano_ZFTwig_Loader_FileLoader extends FilesystemLoader
      *
      * @param string $path The directory to add
      */
-    public function addPath($path, $namespace = '__main__')
+    public function addPath(string $path, string $namespace = self::MAIN_NAMESPACE): void
     {
         if (!is_dir($path)) {
             throw new LoaderError(sprintf('The "%s" directory does not exist.', $path));

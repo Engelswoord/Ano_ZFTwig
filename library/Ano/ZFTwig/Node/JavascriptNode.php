@@ -27,9 +27,9 @@ class Ano_ZFTwig_Node_JavascriptNode extends Node
 {
     protected $contentKey;
 
-    public function __construct(AbstractExpression $expr, AbstractExpression $options, $lineno, $tag = null)
+    public function __construct(AbstractExpression $expr, AbstractExpression $options, $lineno)
     {
-        parent::__construct(array('expr' => $expr, 'options' => $options), array(), $lineno, $tag);
+        parent::__construct(array('expr' => $expr, 'options' => $options), array(), $lineno);
     }
 
     /**
@@ -39,13 +39,13 @@ class Ano_ZFTwig_Node_JavascriptNode extends Node
      */
     public function compile(Compiler $compiler)
     {
-        $options = $this->getNode('options');
-        $mode = $options->hasNode('mode') ? $options->getNode('mode')->getAttribute('value') : 'append';
-        $source = $options->hasNode('source') ? $options->getNode('source')->getAttribute('value') : 'file';
+        $options = Ano_ZFTwig_Node_Options::fromNode($this->getNode('options'));
+        $mode = isset($options['mode']) ? $options['mode']->getAttribute('value') : 'append';
+        $source = isset($options['source']) ? $options['source']->getAttribute('value') : 'file';
         $source = ucfirst(strtolower($source));
-        $type = $options->hasNode('type') ? $options->getNode('type')->getAttribute('value') : 'text/javascript';
-        $attrs = $options->hasNode('attrs') ? $options->getNode('attrs') : false;
-        $offset = $options->hasNode('offset') ? $options->getNode('offset') : false;
+        $type = isset($options['type']) ? $options['type']->getAttribute('value') : 'text/javascript';
+        $attrs = isset($options['attrs']) ? $options['attrs'] : false;
+        $offset = isset($options['offset']) ? $options['offset'] : false;
 
         $compiler
             ->addDebugInfo($this)

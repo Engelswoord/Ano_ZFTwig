@@ -27,9 +27,9 @@ class Ano_ZFTwig_Node_StylesheetNode extends Node
 {
     protected $contentKey;
 
-    public function __construct(AbstractExpression $expr, AbstractExpression $options, $lineno, $tag = null)
+    public function __construct(AbstractExpression $expr, AbstractExpression $options, $lineno)
     {
-        parent::__construct(array('expr' => $expr, 'options' => $options), array(), $lineno, $tag);
+        parent::__construct(array('expr' => $expr, 'options' => $options), array(), $lineno);
     }
 
     /**
@@ -39,12 +39,12 @@ class Ano_ZFTwig_Node_StylesheetNode extends Node
      */
     public function compile(Compiler $compiler)
     {
-        $options = $this->getNode('options');
-        $mode = $options->hasNode('mode') ? $options->getNode('mode')->getAttribute('value') : 'append';
-        $media = $options->hasNode('media') ? $options->getNode('media')->getAttribute('value') : 'screen';
-        $attrs = $options->hasNode('attrs') ? $options->getNode('attrs') : false;
-        $offset = $options->hasNode('offset') ? $options->getNode('offset') : false;
-        $conditional = $options->hasNode('conditional') ? $options->getNode('conditional')->getAttribute('value') : false;
+        $options = Ano_ZFTwig_Node_Options::fromNode($this->getNode('options'));
+        $mode = isset($options['mode']) ? $options['mode']->getAttribute('value') : 'append';
+        $media = isset($options['media']) ? $options['media']->getAttribute('value') : 'screen';
+        $attrs = isset($options['attrs']) ? $options['attrs'] : false;
+        $offset = isset($options['offset']) ? $options['offset'] : false;
+        $conditional = isset($options['conditional']) ? $options['conditional']->getAttribute('value') : false;
 
         $compiler
             ->addDebugInfo($this)
